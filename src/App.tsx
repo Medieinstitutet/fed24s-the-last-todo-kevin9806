@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./app.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+type Todo = {
+  id: number;
+  text: string;
+  done: boolean;
+};
+
+const initialTodos: Todo[] = [
+  { id: 1, text: "käka frukost", done: false },
+  { id: 2, text: "Plugga TypeScript", done: false },
+  { id: 3, text: "Plugga React", done: false },
+  { id: 4, text: "Träna ihjäl ", done: false },
+];
+
+export default function App() {
+  const [todos, setTodos] = useState<Todo[]>(initialTodos);
+
+  const handleClick = (id: number) => {
+    setTodos((prev) =>
+      prev.map((todo) =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo
+      )
+    );
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div id="root">
+      <h1>Min Todo-lista</h1>
+      <ul>
+        {todos.map((todo) => (
+          <li
+            key={todo.id}
+            onClick={() => handleClick(todo.id)}
+            className={todo.done ? "done" : ""}
+          >
+            {todo.text}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
-
-export default App
